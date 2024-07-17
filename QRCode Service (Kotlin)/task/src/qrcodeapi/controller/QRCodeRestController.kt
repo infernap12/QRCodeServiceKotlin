@@ -1,5 +1,6 @@
 package qrcodeapi.controller
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -24,18 +25,27 @@ class QRCodeRestController {
 
     @GetMapping(path = ["/api/qrcode"])
     fun getImage(
-        @RequestParam size: Int,
-        @RequestParam type: String,
-        @RequestParam contents: String
+        @RequestParam(defaultValue = "250") size: Int,
+        @RequestParam(defaultValue = "png") type: String,
+        @RequestParam contents: String,
+        @RequestParam(defaultValue = "L") correction: String
     ): ResponseEntity<Any> {
         return try {
             if (contents.isBlank()) throw Exception("Contents cannot be null or blank")
             if (size !in 150..350) throw Exception("Image size must be between 150 and 350 pixels")
 
+            val correctionLevel: ErrorCorrectionLevel
+            try {
+                correctionLevel = ErrorCorrectionLevel.valueOf(correction.uppercase())
+            } catch (e: Exception) {
+                throw Exception("Permitted error correction levels are L, M, Q, H")
+            }
+
+
             val mt: MediaType = MediaType.valueOf("image/${type.lowercase()}")
             if (!supportedTypes.contains(mt)) throw Exception("Only png, jpeg and gif image types are supported")
 
-            val bufferedImage: BufferedImage = QrCode.qrCode(size, contents)
+            val bufferedImage: BufferedImage = QrCode.qrCode(size, contents, correctionLevel)
 
             ResponseEntity
                 .ok()

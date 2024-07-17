@@ -1,37 +1,21 @@
 package qrcodeapi.model
 
 import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
-import java.awt.Color
-import java.awt.Graphics2D
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import java.awt.image.BufferedImage
 
 
 class QrCode {
 
-
-    fun testSquare(size: Int): BufferedImage {
-
-
-        val image = BufferedImage(size, size, BufferedImage.TYPE_INT_RGB)
-        val g: Graphics2D = image.createGraphics()
-
-        g.color = Color.WHITE
-        g.fillRect(0, 0, size, size)
-
-        return image
-    }
-
-
     companion object {
-        fun testSquare(size: Int = 250): BufferedImage {
-            return QrCode().testSquare(size)
-        }
 
-        fun qrCode(size: Int = 250, contents: String = "TEST"): BufferedImage {
+        fun qrCode(size: Int, contents: String, correctionLevel: ErrorCorrectionLevel): BufferedImage {
             val writer = QRCodeWriter()
-            val bitMatrix = writer.encode(contents, BarcodeFormat.QR_CODE, size, size)
+            val hints = mapOf(EncodeHintType.ERROR_CORRECTION to correctionLevel)
+            val bitMatrix = writer.encode(contents, BarcodeFormat.QR_CODE, size, size, hints)
 
             return MatrixToImageWriter.toBufferedImage(bitMatrix)
         }
