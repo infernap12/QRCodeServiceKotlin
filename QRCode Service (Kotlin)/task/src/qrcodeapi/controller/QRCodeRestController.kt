@@ -1,9 +1,10 @@
 package qrcodeapi.controller
 
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import qrcodeapi.model.QrCode
+import java.awt.image.*
 
 @RestController
 class QRCodeRestController {
@@ -15,5 +16,11 @@ class QRCodeRestController {
     fun health() = ResponseEntity("", HttpStatus.OK)
 
     @GetMapping(path = ["/api/qrcode"])
-    fun qrcode() = ResponseEntity("", HttpStatus.NOT_IMPLEMENTED)
+    fun getImage(): ResponseEntity<BufferedImage> {
+        val bufferedImage: BufferedImage = QrCode.testSquare()
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(bufferedImage)
+    }
 }
