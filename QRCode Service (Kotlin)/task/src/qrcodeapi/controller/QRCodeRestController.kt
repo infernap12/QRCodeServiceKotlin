@@ -17,9 +17,6 @@ val supportedTypes: List<MediaType> = listOf(
 @RestController
 class QRCodeRestController {
 
-    @GetMapping(path = ["/"])
-    fun hello() = ResponseEntity("Hello World", HttpStatus.OK);
-
     @GetMapping(path = ["/api/health"])
     fun health() = ResponseEntity("", HttpStatus.OK)
 

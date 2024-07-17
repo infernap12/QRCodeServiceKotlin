@@ -11,6 +11,6 @@ class MyConverters {
 
     @Bean
     fun bufferedImageHttpMessageConverter(): HttpMessageConverter<BufferedImage> {
-        return BufferedImageHttpMessageConverter();
+        return BufferedImageHttpMessageConverter()
     }
 }
