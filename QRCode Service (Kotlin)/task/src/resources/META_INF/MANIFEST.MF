@@ -1,0 +1,6 @@
+Specification-Title: QrCode Service
+Specification-Version: 1.0
+Specification-Vendor: Hyperskill.org
+Implementation-Title: QrCode Service
+Implementation-Version: 0.1
+Implementation-Vendor: Infernap12.com
