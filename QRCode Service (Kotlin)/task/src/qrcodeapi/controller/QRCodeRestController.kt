@@ -23,11 +23,19 @@ class QRCodeRestController {
     fun health() = ResponseEntity("", HttpStatus.OK)
 
     @GetMapping(path = ["/api/qrcode"])
-    fun getImage(@RequestParam size: Int, @RequestParam type: String): ResponseEntity<Any> {
+    fun getImage(
+        @RequestParam size: Int,
+        @RequestParam type: String,
+        @RequestParam contents: String
+    ): ResponseEntity<Any> {
         return try {
-            val bufferedImage: BufferedImage = QrCode.testSquare(size)
+            if (contents.isBlank()) throw Exception("Contents cannot be null or blank")
+            if (size !in 150..350) throw Exception("Image size must be between 150 and 350 pixels")
+
             val mt: MediaType = MediaType.valueOf("image/${type.lowercase()}")
             if (!supportedTypes.contains(mt)) throw Exception("Only png, jpeg and gif image types are supported")
+
+            val bufferedImage: BufferedImage = QrCode.qrCode(size, contents)
 
             ResponseEntity
                 .ok()
