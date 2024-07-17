@@ -11,21 +11,21 @@ import java.awt.image.BufferedImage
 class QrCode {
 
 
-    fun testSquare(): BufferedImage {
-        val width = 250
-        val height = 250
-        val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+    fun testSquare(size: Int): BufferedImage {
+        if (size !in 150..350) throw Exception("Image size must be between 150 and 350 pixels")
+
+        val image = BufferedImage(size, size, BufferedImage.TYPE_INT_RGB)
         val g: Graphics2D = image.createGraphics()
 
         g.color = Color.WHITE
-        g.fillRect(0, 0, width, height)
+        g.fillRect(0, 0, size, size)
 
         return image
     }
 
     companion object {
-        fun testSquare(): BufferedImage {
-            return QrCode().testSquare()
+        fun testSquare(size: Int = 250): BufferedImage {
+            return QrCode().testSquare(size)
         }
     }
 }
